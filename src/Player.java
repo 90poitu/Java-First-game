@@ -1,9 +1,7 @@
 public class Player {
     int health;
-    double damage;
-    double bonusDamage;
+    double damage, bonusDamage;
      String name;
-
      public Player(int health, double damage, String title)
      {
          this.health = health;
