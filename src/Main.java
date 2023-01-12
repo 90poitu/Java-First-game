@@ -2,14 +2,14 @@ import java.util.Scanner;
 import java.util.concurrent.ThreadLocalRandom;
 public class Main {
     static Scanner scanner = new Scanner(System.in);
-    static Player player = new Player(100, 50,"Player A");
-    static Player enemyA = new Player(100, 0, "Enemy A");
+    static Player player = new Player(100, 0,"Player A");
+    static Player enemyA = new Player(100, 50, "Enemy A");
     static byte Turn = -1;
     static byte Rounds;
     public static void main(String[] args) {
 
         Turn = 0;
-        do {
+        while (enemyA.health > 0 && player.health > 0) {
             RoundHeader();
 
             byte scannerInput = scanner.nextByte();
@@ -20,7 +20,7 @@ public class Main {
                 enemyTurn();
                 Rounds++;
             }
-        } while (player.health > 0 || enemyA.health > 0);
+        }
     }
     static void RoundHeader ()
     {
@@ -44,11 +44,11 @@ public class Main {
             switch (scannerInput) {
                 case 1:
                     if (enemyA.health > 0) {
-                        player.bonusDamage = ThreadLocalRandom.current().nextInt(0, 10);
-                        enemyA.health = (int) (enemyA.health - player.damage - player.bonusDamage);
-                        System.out.println(player.name + " did " + (player.damage + player.bonusDamage) + " damage!");
-                        Turn = 1;
-                        System.out.println("End turn for " + player.name);
+
+                        playerRandomAttackDamageBonus(5, 15);
+
+                        endTurn((byte) 1, player);
+
                         if (enemyA.health <=0) {
                             System.out.println(enemyA.name + " has died!");
                             System.out.println("====== Round(s) " + Rounds + "======");
@@ -63,15 +63,35 @@ public class Main {
     }
     static void enemyTurn()
     {
+        if (enemyA.health > 0) {
             System.out.println("\n " + enemyA.name + " turn to fight!\n");
-            enemyA.bonusDamage = ThreadLocalRandom.current().nextInt(1, 16);
-            player.health = (int) (player.health - enemyA.damage - enemyA.bonusDamage);
-            System.out.println(enemyA.name + " did " + (enemyA.damage + enemyA.bonusDamage) + " damage!");
-            Turn = 0;
-        System.out.println("End turn for " + enemyA.name);
-        if (player.health <= 0) {
-            System.out.println(player.name + " has died!");
-            System.out.println("====== Round(s) " + Rounds + "======");
+
+            enemyRandomAttackDamageBonus(5, 25);
+
+            endTurn((byte) 0 , enemyA);
+
+            if (player.health <= 0) {
+                System.out.println(player.name + " has died!");
+                System.out.println("====== Round(s) " + Rounds + "======");
+            }
         }
+    }
+    static void endTurn(byte turn, Player character)
+    {
+        Turn = turn;
+        System.out.println("End turn for " + character.name);
+    }
+    static void playerRandomAttackDamageBonus(float minAttackDamageValue, float maxAttackDamageValue)
+    {
+        player.bonusDamage = ThreadLocalRandom.current().nextDouble(minAttackDamageValue, maxAttackDamageValue);
+        enemyA.health = (int) (enemyA.health - player.damage - player.bonusDamage);
+        System.out.println(player.name + " did " + player.damage + " base damage \n and " + player.bonusDamage + " bonus damage!");
+    }
+    static void enemyRandomAttackDamageBonus(float minAttackDamageValue, float maxAttackDamageValue)
+    {
+        enemyA.bonusDamage = ThreadLocalRandom.current().nextDouble(minAttackDamageValue, maxAttackDamageValue);
+        player.health = (int) (player.health - enemyA.damage - enemyA.bonusDamage);
+        System.out.println(enemyA.name + " did " + enemyA.damage + " base damage \n and " + enemyA.bonusDamage + " bonus damage!");
+
     }
 }
