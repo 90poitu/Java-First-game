@@ -2,8 +2,8 @@ import java.util.Scanner;
 import java.util.concurrent.ThreadLocalRandom;
 public class Main {
     static Scanner scanner = new Scanner(System.in);
-    static Player player = new Player(100, 5.5,"Player A");
-    static Player enemyA = new Player(100, 4.4, "Enemy A");
+    static Player player = new Player(100, 50,"Player A");
+    static Player enemyA = new Player(100, 0, "Enemy A");
     static byte Turn = -1;
     static byte Rounds;
     public static void main(String[] args) {
@@ -20,7 +20,7 @@ public class Main {
                 enemyTurn();
                 Rounds++;
             }
-        } while (player.health > 0 || enemyA.health < 0);
+        } while (player.health > 0 || enemyA.health > 0);
     }
     static void RoundHeader ()
     {
@@ -48,6 +48,7 @@ public class Main {
                         enemyA.health = (int) (enemyA.health - player.damage - player.bonusDamage);
                         System.out.println(player.name + " did " + (player.damage + player.bonusDamage) + " damage!");
                         Turn = 1;
+                        System.out.println("End turn for " + player.name);
                         if (enemyA.health <=0) {
                             System.out.println(enemyA.name + " has died!");
                             System.out.println("====== Round(s) " + Rounds + "======");
@@ -67,6 +68,7 @@ public class Main {
             player.health = (int) (player.health - enemyA.damage - enemyA.bonusDamage);
             System.out.println(enemyA.name + " did " + (enemyA.damage + enemyA.bonusDamage) + " damage!");
             Turn = 0;
+        System.out.println("End turn for " + enemyA.name);
         if (player.health <= 0) {
             System.out.println(player.name + " has died!");
             System.out.println("====== Round(s) " + Rounds + "======");
