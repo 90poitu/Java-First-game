@@ -1,4 +1,4 @@
-### Hello. Welcome to my very first project using Java. 
+### Hello. Welcome to my very first project using Java 
 
 ### What this program do?
 #### This program is like a game. You start off as a player which has Health, Damage, Bonus damage. You as the player must defeat an enemy (A.I) that has all the same variables as the player.
