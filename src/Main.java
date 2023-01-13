@@ -2,8 +2,8 @@ import java.util.Scanner;
 import java.util.concurrent.ThreadLocalRandom;
 public class Main {
     static Scanner scanner = new Scanner(System.in);
-    static Player player = new Player(100, 0,"Player A");
-    static Player enemyA = new Player(100, 50, "Enemy A");
+    static Player player = new Player(100, 4.4,"Player");
+    static Player enemyA = new Player(100, 5.5, "Enemy (A.I)");
     static byte Turn = -1;
     static byte Rounds;
     public static void main(String[] args) {
@@ -28,6 +28,7 @@ public class Main {
         System.out.println("=== " + enemyA.name + " stats ===\n");
         System.out.println("Health: " + enemyA.health);
         System.out.println("Damage: " + enemyA.damage);
+        System.out.println(" : " + enemyA.damage);
         System.out.println("============");
 
         System.out.println("====== Round(s) " + Rounds + " ======");
@@ -37,6 +38,7 @@ public class Main {
         System.out.println("Health: " + player.health);
         System.out.println("Damage: " + player.damage);
         System.out.println("============");
+        System.out.println(player.name + " turn to fight!");
     }
     static void options (byte scannerInput)
     {
@@ -44,7 +46,6 @@ public class Main {
             switch (scannerInput) {
                 case 1:
                     if (enemyA.health > 0) {
-
                         playerRandomAttackDamageBonus(5, 15);
 
                         endTurn((byte) 1, player);
@@ -54,9 +55,6 @@ public class Main {
                             System.out.println("====== Round(s) " + Rounds + "======");
                         }
                         break;
-                    }
-                    else {
-                        System.out.println(enemyA.name + " has died!");
                     }
             }
         }
