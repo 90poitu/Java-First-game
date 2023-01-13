@@ -37,13 +37,13 @@ public class Main {
 
         System.out.println("====== Round(s) " + Rounds + " ======");
         System.out.println("Options for the " + player.name);
-        System.out.println("1) Attack\n");
+        System.out.println("1) Attack");
 
         System.out.println("=== " + player.name + " stats ===");
         System.out.println("Health: " + player.health);
         System.out.println("Damage: " + player.damage);
         System.out.println("============");
-        System.out.println(player.name + " turn to fight!");
+        System.out.println(player.name + " turn!");
     }
     static void options (byte scannerInput)
     {
@@ -55,7 +55,8 @@ public class Main {
 
                         endTurn((byte) 1, player);
 
-                        if (enemyA.health <=0) {
+                        if (enemyA.health <=0)
+                        {
                             System.out.println(enemyA.name + " has died!");
                             System.out.println("====== Round(s) " + Rounds + "======");
                         }
@@ -68,7 +69,7 @@ public class Main {
     {
         if (enemyA.health > 0) {
 
-            System.out.println("\n " + enemyA.name + " turn to fight!\n");
+            System.out.println("\n " + enemyA.name + " turn!\n");
             // 0 - 2
             int RandomDecision = ThreadLocalRandom.current().nextInt( 0, 3);
 
@@ -100,6 +101,17 @@ public class Main {
         System.out.println(enemyA.name + " did " + enemyA.damage + " base damage \n and " + enemyA.bonusDamage + " bonus damage!");
 
     }
+    static void enemyRandomHealthRegenerate(byte minRegenerateValue, byte maxRegenerateValue)
+    {
+        if (enemyA.health < 100) {
+            double healthGenerate = ThreadLocalRandom.current().nextDouble(minRegenerateValue, maxRegenerateValue);
+            enemyA.health = enemyA.health + (int) healthGenerate;
+            System.out.println(enemyA.name + " healed itself. " + enemyA.name + " now has " + enemyA.health + " health.");
+        }
+        else {
+            System.out.println(enemyA.name + " is already on " + enemyA.health + "/100");
+        }
+    }
     static void enemyRandomDescision(int RandomDecision)
     {
         switch (RandomDecision) {
@@ -107,7 +119,7 @@ public class Main {
                 enemyRandomAttackDamageBonus(5, 25);
                 break;
             case 1:
-                System.out.println("Haven't programmed yet");
+                enemyRandomHealthRegenerate((byte) 5, (byte) 15.2);
                 break;
             case 2:
                 System.out.println("Haven't programmed yet");
