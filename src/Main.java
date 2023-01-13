@@ -9,7 +9,9 @@ public class Main {
     public static void main(String[] args) {
 
         Turn = 0;
+
         while (enemyA.health > 0 && player.health > 0) {
+
             RoundHeader();
 
             byte scannerInput = scanner.nextByte();
@@ -25,13 +27,16 @@ public class Main {
     static void RoundHeader ()
     {
         System.out.println("====== Round(s) " + Rounds + " ======");
+        System.out.println("Options for the " + enemyA.name);
+        System.out.println("1) (A.I) Attack");
+        System.out.println("2) (A.I) Health recharge");
         System.out.println("=== " + enemyA.name + " stats ===\n");
         System.out.println("Health: " + enemyA.health);
         System.out.println("Damage: " + enemyA.damage);
-        System.out.println(" : " + enemyA.damage);
         System.out.println("============");
 
         System.out.println("====== Round(s) " + Rounds + " ======");
+        System.out.println("Options for the " + player.name);
         System.out.println("1) Attack\n");
 
         System.out.println("=== " + player.name + " stats ===");
@@ -62,9 +67,12 @@ public class Main {
     static void enemyTurn()
     {
         if (enemyA.health > 0) {
-            System.out.println("\n " + enemyA.name + " turn to fight!\n");
 
-            enemyRandomAttackDamageBonus(5, 25);
+            System.out.println("\n " + enemyA.name + " turn to fight!\n");
+            // 0 - 2
+            int RandomDecision = ThreadLocalRandom.current().nextInt( 0, 3);
+
+            enemyRandomDescision(RandomDecision);
 
             endTurn((byte) 0 , enemyA);
 
@@ -91,5 +99,19 @@ public class Main {
         player.health = (int) (player.health - enemyA.damage - enemyA.bonusDamage);
         System.out.println(enemyA.name + " did " + enemyA.damage + " base damage \n and " + enemyA.bonusDamage + " bonus damage!");
 
+    }
+    static void enemyRandomDescision(int RandomDecision)
+    {
+        switch (RandomDecision) {
+            case 0:
+                enemyRandomAttackDamageBonus(5, 25);
+                break;
+            case 1:
+                System.out.println("Haven't programmed yet");
+                break;
+            case 2:
+                System.out.println("Haven't programmed yet");
+                break;
+        }
     }
 }
