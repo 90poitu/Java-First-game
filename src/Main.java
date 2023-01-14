@@ -1,9 +1,10 @@
+import java.util.Locale;
 import java.util.Scanner;
 import java.util.concurrent.ThreadLocalRandom;
 public class Main {
     static Scanner scanner = new Scanner(System.in);
-    static Player player = new Player(100, 0,"Player");
-    static Player enemyA = new Player(100, 0, "Enemy (A.I)");
+    static Player player = new Player(100, .00001,"Player");
+    static Player enemyA = new Player(100, .00001, "Enemy (A.I)");
     static byte Turn = -1;
     static byte Rounds;
     static char prefix = '>';
@@ -15,9 +16,9 @@ public class Main {
 
             RoundHeader();
 
-            byte scannerInput = scanner.nextByte();
+            String scannerInput = scanner.nextLine();
 
-            options(scannerInput);
+            playerTurn(scannerInput);
 
             if (Turn == 1) {
                 enemyTurn();
@@ -28,56 +29,46 @@ public class Main {
     static void RoundHeader ()
     {
         System.out.println("====== Round(s) " + Rounds + " ======");
-        System.out.println("Options for the " + enemyA.name);
-        System.out.println("1) " + enemyA.name.substring(6, 11) + " Attack");
-        System.out.println("2) " + enemyA.name.substring(6, 11) + " Health recharge\n");
-        System.out.println("2) " + enemyA.name.substring(6, 11) + " Health recharge\n");
+        System.out.println("Options for the " + enemyA.name + "\n");
+        System.out.println("1) " + enemyA.name.substring(6, (11 - 0))+ " Attack");
+        System.out.println("2) " + enemyA.name.substring(6, (11 - 0)) + " Health recharge");
+        System.out.println("3) " + enemyA.name.substring(6, (11 - 0)) + " Skip its turn");
+        System.out.println("4) " + enemyA.name.substring(6, (11 - 0)) + " Boost damage\n");
         System.out.println("=== " + enemyA.name + " stats ===\n");
         System.out.println("Health: " + enemyA.health + "/100");
-        if (Rounds <= 0)
-        {
-            System.out.println("Damage: " + enemyA.damage + " (bonus damage may apply)");
-        }
-        else{
-            System.out.println("Damage: " + enemyA.damage);
-        }
+        System.out.println("Damage: " + (byte) enemyA.damage);
         System.out.println("============");
 
         System.out.println("====== Round(s) " + Rounds + " ======");
-        System.out.println("Options for the " + player.name);
-        System.out.println("1) " + player.name + " Attack");
+        System.out.println("Options for the " + player.name + "\n");
+        System.out.println("1) Attack - (bonus damage may apply)");
+        System.out.println("2) Attack - (bonus damage may apply)");
 
         System.out.println("=== " + player.name + " stats ===");
         System.out.println("Health: " + player.health + "/100");
-        if (Rounds <= 0)
-        {
-            System.out.println("Damage: " + player.damage + " (bonus damage may apply)");
-        }
-        else{
-            System.out.println("Damage: " + player.damage);
-        }
+        System.out.println("Damage: " + (byte) player.damage);
         System.out.println("============");
         System.out.println(prefix + " " + player.name + " turn!");
     }
-    static void options (byte scannerInput)
+    static void playerTurn (String scannerInput)
     {
         if (Turn == 0) {
             switch (scannerInput) {
-                case 1:
+                case "1":
                     if (enemyA.health > 0) {
                         playerRandomAttackDamageBonus(0, 2);
-
-                        endTurn((byte) 1, player);
 
                         if (enemyA.health <=0)
                         {
                             System.out.println(enemyA.name + " has died!");
                             System.out.println("====== Round(s) " + Rounds + "======");
                         }
+                        endTurn((byte)  1, player);
                         break;
                     }
                 default:
-                    endTurn((byte)  1, player);
+                    endTurn((byte)  0, enemyA);
+                    System.out.println(prefix + " " + "Please enter an input.");
                     break;
             }
         }
@@ -87,7 +78,7 @@ public class Main {
         if (enemyA.health > 0) {
 
             System.out.println("\n" + prefix + " " + enemyA.name + " turn!\n");
-            // 0 - 2
+
             int RandomDecision = ThreadLocalRandom.current().nextInt( 0, 4);
 
             enemyRandomDescision(RandomDecision);
@@ -149,6 +140,7 @@ public class Main {
                 break;
             case 2:
                 System.out.println(enemyA.name+" skipped their turn!");
+                endTurn((byte) 0, enemyA);
                 break;
             case 3:
                 enemyBoostedDamage(0, 3);
