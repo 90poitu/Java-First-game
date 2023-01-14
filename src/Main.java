@@ -42,7 +42,7 @@ public class Main {
         System.out.println("====== Round(s) " + Rounds + " ======");
         System.out.println("Options for the " + player.name + "\n");
         System.out.println("1) Attack - (bonus damage may apply)");
-        System.out.println("2) Attack - (bonus damage may apply)");
+        System.out.println("2) Heal recharge");
 
         System.out.println("=== " + player.name + " stats ===");
         System.out.println("Health: " + player.health + "/100");
