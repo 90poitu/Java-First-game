@@ -1,3 +1,4 @@
+import java.awt.Color;
 import java.util.ArrayList;
 import java.util.Scanner;
 import java.util.concurrent.ThreadLocalRandom;
@@ -10,16 +11,22 @@ public class Main {
     static char prefix = '>';
     static ArrayList<String> enemyOptions = new ArrayList<String>();
     static ArrayList<String> playerOptions = new ArrayList<String>();
-
+    static ArrayList<String> enemyDetails = new ArrayList<String>();
+    static String purple = "\u001B[35m";
+    static String yellow = "\u001B[33m";
+    static String colorReset = "\u001B[0m";
     public static void main(String[] args) {
 
-        enemyOptions.add(prefix + " " + 1 + " " + enemyA.name.substring(6, (11 - 0)) + " Attack");
-        enemyOptions.add(prefix + " " + 2 + " " + enemyA.name.substring(6, (11 - 0)) + "Health recharge");
-        enemyOptions.add(3 + " " + enemyA.name.substring(6, (11 - 0)) + "Skip its turn");
-        enemyOptions.add(4 + " " + enemyA.name.substring(6, (11 - 0)) + "Boost damage");
+        enemyOptions.add(prefix + purple + " " + yellow + enemyA.name.substring(6, (11 - 0)) + colorReset + purple + " Attack" + colorReset);
+        enemyOptions.add(prefix + purple + " " + yellow + enemyA.name.substring(6, (11 - 0)) + colorReset + purple + " Health recharge" + colorReset);
+        enemyOptions.add(prefix + purple + " " + yellow + enemyA.name.substring(6, (11 - 0)) + colorReset + purple + " Skip its turn" + colorReset);
+        enemyOptions.add(prefix + purple + " " + yellow + enemyA.name.substring(6, (11 - 0)) + colorReset + purple + " Boost damage" + colorReset);
 
-        playerOptions.add("Attack");
-        playerOptions.add("Health recharge");
+        playerOptions.add(prefix + purple + " Attack" + colorReset);
+        playerOptions.add(prefix + purple +" Health recharge\n" + colorReset);
+
+        enemyDetails.add(prefix + purple + "Health: " + enemyA.health);
+        enemyDetails.add(prefix + purple + "Damage: " + enemyA.damage);
 
         Turn = 0;
 
@@ -46,14 +53,14 @@ public class Main {
         System.out.println(enemyOptions.get(2));
         System.out.println(enemyOptions.get(3) + "\n");
         System.out.println("=== " + enemyA.name + " stats ===\n");
-        System.out.println("Health: " + enemyA.health + "/100");
-        System.out.println("Damage: " + (byte) enemyA.damage);
+        System.out.println(enemyDetails.get(0));
+        System.out.println(enemyDetails.get(1));
         System.out.println("============");
 
         System.out.println("====== Round(s) " + Rounds + " ======");
         System.out.println("Options for the " + player.name + "\n");
-        System.out.println("1) " + playerOptions.get(0));
-        System.out.println("2) " + playerOptions.get(1));
+        System.out.println(playerOptions.get(0));
+        System.out.println(playerOptions.get(1));
 
         System.out.println("=== " + player.name + " stats ===");
         System.out.println("Health: " + player.health + "/100");
