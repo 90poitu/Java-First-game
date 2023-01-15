@@ -1,40 +1,36 @@
-import java.awt.Color;
 import java.util.ArrayList;
 import java.util.Scanner;
 import java.util.concurrent.ThreadLocalRandom;
 public class Main {
     static Scanner scanner = new Scanner(System.in);
-    static Player player = new Player(100, .00001,"Player");
-    static Player enemyA = new Player(100, .00001, "Enemy (A.I)");
-    static ArrayList<String> enemyOptions = new ArrayList<String>();
-    static ArrayList<String> playerOptions = new ArrayList<String>();
-    static ArrayList<String> enemyDetails = new ArrayList<String>();
-    static ArrayList<String> playerDetails = new ArrayList<String>();
-    static byte Turn = -1;
-    static byte Rounds;
+    static PlayerClass playerClass = new PlayerClass(100, .00001,"Player");
+    static PlayerClass enemyA = new PlayerClass(100, .00001, "Enemy (A.I)");
+    static ColorsClass color = new ColorsClass("\u001B[35m", "\u001B[33m", "\u001B[0m");
+    static ArrayList<String> enemyOptions, playerOptions, enemyDetails,playerDetails = new ArrayList<String>();
+    //static ArrayList<String> playerOptions = new ArrayList<String>();
+    //static ArrayList<String> enemyDetails = new ArrayList<String>();
+    //static ArrayList<String> playerDetails = new ArrayList<String>();
+    static byte Turn, Rounds;
     static char prefix = '>';
-    static String purple = "\u001B[35m";
-    static String yellow = "\u001B[33m";
-    static String colorReset = "\u001B[0m";
     public static void main(String[] args) {
 
-        enemyOptions.add(prefix + purple + " " + yellow + enemyA.name.substring(6, (11 - 0)) + colorReset + purple + " Attack" + colorReset);
-        enemyOptions.add(prefix + purple + " " + yellow + enemyA.name.substring(6, (11 - 0)) + colorReset + purple + " Health recharge" + colorReset);
-        enemyOptions.add(prefix + purple + " " + yellow + enemyA.name.substring(6, (11 - 0)) + colorReset + purple + " Skip its turn" + colorReset);
-        enemyOptions.add(prefix + purple + " " + yellow + enemyA.name.substring(6, (11 - 0)) + colorReset + purple + " Boost damage" + colorReset);
+        enemyOptions.add(prefix + color.purple + " " + color.yellow + enemyA.name.substring(6, (11 - 0)) + color.colorReset + color.purple + " Attack" + color.colorReset);
+        enemyOptions.add(prefix + color.purple + " " + color.yellow + enemyA.name.substring(6, (11 - 0)) + color.colorReset + color.purple + " Health recharge" + color.colorReset);
+        enemyOptions.add(prefix + color.purple + " " + color.yellow + enemyA.name.substring(6, (11 - 0)) + color.colorReset + color.purple + " Skip its turn" + color.colorReset);
+        enemyOptions.add(prefix + color.purple + " " + color.yellow + enemyA.name.substring(6, (11 - 0)) + color.colorReset + color.purple + " Boost damage" + color.colorReset);
 
-        playerOptions.add(prefix + purple + " Attack" + colorReset);
-        playerOptions.add(prefix + purple +" Health recharge\n" + colorReset);
+        playerOptions.add(prefix +color.purple + " Attack" + color.colorReset);
+        playerOptions.add(prefix +color.purple +" Health recharge\n" + color.colorReset);
 
-        enemyDetails.add(prefix + purple + " Health: " + enemyA.health + colorReset);
-        enemyDetails.add(prefix + purple + "Base damage: " + (byte)enemyA.damage + colorReset);
+        enemyDetails.add(prefix + color.purple+ " Health: " + enemyA.health + color.colorReset);
+        enemyDetails.add(prefix + color.purple+ "Base damage: " + (byte)enemyA.damage + color.colorReset);
 
-        playerDetails.add(prefix + purple + " Health: " + player.health + colorReset);
-        playerDetails.add(prefix + purple + "Base damage: " + (byte)player.damage + colorReset);
+        playerDetails.add(prefix + color.purple + " Health: " + playerClass.health + color.colorReset);
+        playerDetails.add(prefix + "Base damage: " + (byte) playerClass.damage + color.colorReset);
 
         Turn = 0;
 
-            while (enemyA.health > 0 && player.health > 0) {
+            while (enemyA.health > 0 && playerClass.health > 0) {
 
                 RoundHeader();
 
@@ -62,15 +58,15 @@ public class Main {
         System.out.println("============");
 
         System.out.println("====== Round(s) " + Rounds + " ======");
-        System.out.println("Options for the " + player.name + "\n");
+        System.out.println("Options for the " + playerClass.name + "\n");
         System.out.println(playerOptions.get(0));
         System.out.println(playerOptions.get(1));
 
-        System.out.println("=== " + player.name + " stats ===");
-        System.out.println("Health: " + player.health + "/100");
-        System.out.println("Damage: " + (byte) player.damage);
+        System.out.println("=== " + playerClass.name + " stats ===");
+        System.out.println("Health: " + playerClass.health + "/100");
+        System.out.println("Damage: " + (byte) playerClass.damage);
         System.out.println("============");
-        System.out.println(prefix + " " + player.name + " turn!");
+        System.out.println(prefix + " " + playerClass.name + " turn!");
     }
     static void playerTurn (String scannerInput)
     {
@@ -80,23 +76,23 @@ public class Main {
                     if (enemyA.health > 0) {
                         playerRandomAttackDamageBonus(0, 2);
 
-                        if (enemyA.health <=0)
+                        if (enemyA.health <= 0)
                         {
                             System.out.println(enemyA.name + " has died!");
                             System.out.println("====== Round(s) " + Rounds + "======");
                         }
-                        endTurn((byte)  1, player);
+                        endTurn((byte)  1, playerClass);
                         break;
                     }
                 case "2":
-                    if (player.health > 0 && player.health <= 100)
+                    if (playerClass.health > 0 && playerClass.health < 100)
                     {
                         playerHealthRegenerate((byte) 2, (byte) 25);
                     }
                     else {
-                        System.out.println(player.name + " wanted to use it's ability to heal itself but \n is already on " + player.health + "/100\n");
+                        System.out.println(playerClass.name + " wanted to use it's ability to heal itself but \nis already on " + playerClass.health + "/"+ playerClass.health + "\n");
                     }
-                    endTurn((byte)  1, player);
+                    endTurn((byte)  1, playerClass);
                     break;
                 default:
                     endTurn((byte)  0, enemyA);
@@ -109,11 +105,11 @@ public class Main {
     static void playerHealthRegenerate(byte minRegenerateValue, byte maxRegenerateValue)
     {
         double healthRegerate = ThreadLocalRandom.current().nextDouble(minRegenerateValue, maxRegenerateValue);
-        player.health = player.health + (byte) healthRegerate;
-        if (player.health > 100) {
-            player.health = 100;
+        playerClass.health = playerClass.health + (byte) healthRegerate;
+        if (playerClass.health > 100) {
+            playerClass.health = 100;
         }
-        System.out.println(prefix + " " + player.name + " use it's ability to heal itself. \n " + player.name + " now has " + (int) player.health + " health. \n");
+        System.out.println(prefix + " " + playerClass.name + " use it's ability to heal itself. \n " + playerClass.name + " now has " + (int) playerClass.health + " health. \n");
     }
 
     static void enemyTurn()
@@ -128,27 +124,27 @@ public class Main {
 
             endTurn((byte) 0 , enemyA);
 
-            if (player.health <= 0) {
-                System.out.println(player.name + " has died!");
+            if (playerClass.health <= 0) {
+                System.out.println(playerClass.name + " has died!");
                 System.out.println("====== Round(s) " + Rounds + "======");
             }
         }
     }
-    static void endTurn(byte turn, Player character)
+    static void endTurn(byte turn, PlayerClass character)
     {
         Turn = turn;
         System.out.println("End turn for " + character.name);
     }
     static void playerRandomAttackDamageBonus(float minAttackDamageValue, float maxAttackDamageValue)
     {
-        player.bonusDamage = ThreadLocalRandom.current().nextDouble(minAttackDamageValue, maxAttackDamageValue);
-        enemyA.health = (int) (enemyA.health - player.damage - player.bonusDamage);
-        System.out.println(prefix + " " + player.name + " did " + player.damage + " base damage \n and " + (int) player.bonusDamage + " bonus damage!");
+        playerClass.bonusDamage = ThreadLocalRandom.current().nextDouble(minAttackDamageValue, maxAttackDamageValue);
+        enemyA.health = (int) (enemyA.health - playerClass.damage - playerClass.bonusDamage);
+        System.out.println(prefix + " " + playerClass.name + " did " + playerClass.damage + " base damage \n and " + (int) playerClass.bonusDamage + " bonus damage!");
     }
     static void enemyRandomAttackDamageBonus(float minAttackDamageValue, float maxAttackDamageValue)
     {
         enemyA.bonusDamage = ThreadLocalRandom.current().nextDouble(minAttackDamageValue, maxAttackDamageValue);
-        player.health = (int) (player.health - enemyA.damage - enemyA.bonusDamage);
+        playerClass.health = (int) (playerClass.health - enemyA.damage - enemyA.bonusDamage);
         System.out.println(prefix + " " + enemyA.name + " did " + enemyA.damage + " base damage \n and " + (int) enemyA.bonusDamage + " bonus damage!");
 
     }
