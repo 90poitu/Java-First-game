@@ -6,12 +6,13 @@ public class Main {
     static Scanner scanner = new Scanner(System.in);
     static Player player = new Player(100, .00001,"Player");
     static Player enemyA = new Player(100, .00001, "Enemy (A.I)");
-    static byte Turn = -1;
-    static byte Rounds;
-    static char prefix = '>';
     static ArrayList<String> enemyOptions = new ArrayList<String>();
     static ArrayList<String> playerOptions = new ArrayList<String>();
     static ArrayList<String> enemyDetails = new ArrayList<String>();
+    static ArrayList<String> playerDetails = new ArrayList<String>();
+    static byte Turn = -1;
+    static byte Rounds;
+    static char prefix = '>';
     static String purple = "\u001B[35m";
     static String yellow = "\u001B[33m";
     static String colorReset = "\u001B[0m";
@@ -25,8 +26,11 @@ public class Main {
         playerOptions.add(prefix + purple + " Attack" + colorReset);
         playerOptions.add(prefix + purple +" Health recharge\n" + colorReset);
 
-        enemyDetails.add(prefix + purple + "Health: " + enemyA.health);
-        enemyDetails.add(prefix + purple + "Damage: " + enemyA.damage);
+        enemyDetails.add(prefix + purple + " Health: " + enemyA.health + colorReset);
+        enemyDetails.add(prefix + purple + "Base damage: " + (byte)enemyA.damage + colorReset);
+
+        playerDetails.add(prefix + purple + " Health: " + player.health + colorReset);
+        playerDetails.add(prefix + purple + "Base damage: " + (byte)player.damage + colorReset);
 
         Turn = 0;
 
