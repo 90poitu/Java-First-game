@@ -1,4 +1,4 @@
-import java.util.Locale;
+import java.util.ArrayList;
 import java.util.Scanner;
 import java.util.concurrent.ThreadLocalRandom;
 public class Main {
@@ -8,7 +8,20 @@ public class Main {
     static byte Turn = -1;
     static byte Rounds;
     static char prefix = '>';
+    static ArrayList<String> enemyOptions = new ArrayList<String>();
+    static ArrayList<String> playerOptions = new ArrayList<String>();
+
     public static void main(String[] args) {
+
+        enemyOptions.add("Attack");
+        enemyOptions.add("Health recharge");
+        enemyOptions.add("Skip its turn");
+        enemyOptions.add("Boost damage");
+
+
+
+        playerOptions.add("Attack");
+        playerOptions.add("Health recharge");
 
         Turn = 0;
 
@@ -30,10 +43,10 @@ public class Main {
     {
         System.out.println("====== Round(s) " + Rounds + " ======");
         System.out.println("Options for the " + enemyA.name + "\n");
-        System.out.println("1) " + enemyA.name.substring(6, (11 - 0))+ " Attack");
-        System.out.println("2) " + enemyA.name.substring(6, (11 - 0)) + " Health recharge");
-        System.out.println("3) " + enemyA.name.substring(6, (11 - 0)) + " Skip its turn");
-        System.out.println("4) " + enemyA.name.substring(6, (11 - 0)) + " Boost damage\n");
+        System.out.println("1) " + enemyA.name.substring(6, (11 - 0))+ " " + enemyOptions.get(0));
+        System.out.println("2) " + enemyA.name.substring(6, (11 - 0)) + " " + enemyOptions.get(1));
+        System.out.println("3) " + enemyA.name.substring(6, (11 - 0)) + " " + enemyOptions.get(2));
+        System.out.println("4) " + enemyA.name.substring(6, (11 - 0)) + " " + enemyOptions.get(3) + "\n");
         System.out.println("=== " + enemyA.name + " stats ===\n");
         System.out.println("Health: " + enemyA.health + "/100");
         System.out.println("Damage: " + (byte) enemyA.damage);
@@ -41,8 +54,8 @@ public class Main {
 
         System.out.println("====== Round(s) " + Rounds + " ======");
         System.out.println("Options for the " + player.name + "\n");
-        System.out.println("1) Attack - (bonus damage may apply)");
-        System.out.println("2) Heal recharge");
+        System.out.println("1) " + playerOptions.get(0));
+        System.out.println("2) " + playerOptions.get(1));
 
         System.out.println("=== " + player.name + " stats ===");
         System.out.println("Health: " + player.health + "/100");
@@ -66,6 +79,16 @@ public class Main {
                         endTurn((byte)  1, player);
                         break;
                     }
+                case "2":
+                    if (player.health > 0 && player.health <= 100)
+                    {
+                        playerHealthRegenerate((byte) 2, (byte) 25);
+                    }
+                    else {
+                        System.out.println(player.name + " wanted to use it's ability to heal itself but \n is already on " + player.health + "/100\n");
+                    }
+                    endTurn((byte)  1, player);
+                    break;
                 default:
                     endTurn((byte)  0, enemyA);
                     System.out.println(prefix + " " + "Please enter an input.");
@@ -73,6 +96,17 @@ public class Main {
             }
         }
     }
+
+    static void playerHealthRegenerate(byte minRegenerateValue, byte maxRegenerateValue)
+    {
+        double healthRegerate = ThreadLocalRandom.current().nextDouble(minRegenerateValue, maxRegenerateValue);
+        player.health = player.health + (byte) healthRegerate;
+        if (player.health > 100) {
+            player.health = 100;
+        }
+        System.out.println(prefix + " " + player.name + " use it's ability to heal itself. \n " + player.name + " now has " + (int) player.health + " health. \n");
+    }
+
     static void enemyTurn()
     {
         if (enemyA.health > 0) {
@@ -112,7 +146,7 @@ public class Main {
     static void enemyRandomHealthRegenerate(byte minRegenerateValue, byte maxRegenerateValue)
     {
             double healthGenerate = ThreadLocalRandom.current().nextDouble(minRegenerateValue, maxRegenerateValue);
-            enemyA.health = enemyA.health + (int) healthGenerate;
+            enemyA.health = enemyA.health + (byte) healthGenerate;
             if (enemyA.health > 100) {
                 enemyA.health = 100;
             }
