@@ -13,40 +13,38 @@ public class Main {
 
     public static void main(String[] args) {
 
-        enemyOptions.add("Attack");
-        enemyOptions.add("Health recharge");
-        enemyOptions.add("Skip its turn");
-        enemyOptions.add("Boost damage");
-
-
+        enemyOptions.add(prefix + " " + 1 + " " + enemyA.name.substring(6, (11 - 0)) + " Attack");
+        enemyOptions.add(prefix + " " + 2 + " " + enemyA.name.substring(6, (11 - 0)) + "Health recharge");
+        enemyOptions.add(3 + " " + enemyA.name.substring(6, (11 - 0)) + "Skip its turn");
+        enemyOptions.add(4 + " " + enemyA.name.substring(6, (11 - 0)) + "Boost damage");
 
         playerOptions.add("Attack");
         playerOptions.add("Health recharge");
 
         Turn = 0;
 
-        while (enemyA.health > 0 && player.health > 0) {
+            while (enemyA.health > 0 && player.health > 0) {
 
-            RoundHeader();
+                RoundHeader();
 
-            String scannerInput = scanner.nextLine();
+                String scannerInput = scanner.nextLine();
 
-            playerTurn(scannerInput);
+                playerTurn(scannerInput);
 
-            if (Turn == 1) {
-                enemyTurn();
-                Rounds++;
+                if (Turn == 1) {
+                    enemyTurn();
+                    Rounds++;
+                }
             }
         }
-    }
     static void RoundHeader ()
     {
         System.out.println("====== Round(s) " + Rounds + " ======");
         System.out.println("Options for the " + enemyA.name + "\n");
-        System.out.println("1) " + enemyA.name.substring(6, (11 - 0))+ " " + enemyOptions.get(0));
-        System.out.println("2) " + enemyA.name.substring(6, (11 - 0)) + " " + enemyOptions.get(1));
-        System.out.println("3) " + enemyA.name.substring(6, (11 - 0)) + " " + enemyOptions.get(2));
-        System.out.println("4) " + enemyA.name.substring(6, (11 - 0)) + " " + enemyOptions.get(3) + "\n");
+        System.out.println(enemyOptions.get(0));
+        System.out.println(enemyOptions.get(1));
+        System.out.println(enemyOptions.get(2));
+        System.out.println(enemyOptions.get(3) + "\n");
         System.out.println("=== " + enemyA.name + " stats ===\n");
         System.out.println("Health: " + enemyA.health + "/100");
         System.out.println("Damage: " + (byte) enemyA.damage);
