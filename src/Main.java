@@ -6,10 +6,10 @@ public class Main {
     static PlayerClass playerClass = new PlayerClass(100, .00001,"Player");
     static PlayerClass enemyA = new PlayerClass(100, .00001, "Enemy (A.I)");
     static ColorsClass color = new ColorsClass("\u001B[35m", "\u001B[33m", "\u001B[0m");
-    static ArrayList<String> enemyOptions, playerOptions, enemyDetails,playerDetails = new ArrayList<String>();
-    //static ArrayList<String> playerOptions = new ArrayList<String>();
-    //static ArrayList<String> enemyDetails = new ArrayList<String>();
-    //static ArrayList<String> playerDetails = new ArrayList<String>();
+    static ArrayList<String> enemyOptions = new ArrayList<String>();
+    static ArrayList<String> playerOptions = new ArrayList<String>();
+    static ArrayList<String> enemyDetails = new ArrayList<String>();
+    static ArrayList<String> playerDetails = new ArrayList<String>();
     static byte Turn, Rounds;
     static char prefix = '>';
     public static void main(String[] args) {
@@ -22,17 +22,19 @@ public class Main {
         playerOptions.add(prefix +color.purple + " Attack" + color.colorReset);
         playerOptions.add(prefix +color.purple +" Health recharge\n" + color.colorReset);
 
-        enemyDetails.add(prefix + color.purple+ " Health: " + enemyA.health + color.colorReset);
-        enemyDetails.add(prefix + color.purple+ "Base damage: " + (byte)enemyA.damage + color.colorReset);
+        enemyDetails.add(prefix + color.purple+ " Health: " + color.colorReset + enemyA.health);
+        enemyDetails.add(prefix + color.purple+ " Base damage: " + color.colorReset + (byte)enemyA.damage);
 
-        playerDetails.add(prefix + color.purple + " Health: " + playerClass.health + color.colorReset);
-        playerDetails.add(prefix + "Base damage: " + (byte) playerClass.damage + color.colorReset);
+        playerDetails.add(prefix + color.purple + " Health: " + color.colorReset + playerClass.health);
+        playerDetails.add(prefix + color.purple + " Base damage: " + color.colorReset + (byte) playerClass.damage);
 
         Turn = 0;
 
             while (enemyA.health > 0 && playerClass.health > 0) {
 
                 RoundHeader();
+
+                System.out.println(prefix + " " + playerClass.name + " turn!");
 
                 String scannerInput = scanner.nextLine();
 
@@ -63,10 +65,9 @@ public class Main {
         System.out.println(playerOptions.get(1));
 
         System.out.println("=== " + playerClass.name + " stats ===");
-        System.out.println("Health: " + playerClass.health + "/100");
-        System.out.println("Damage: " + (byte) playerClass.damage);
+        System.out.println(playerDetails.get(0));
+        System.out.println(playerDetails.get(1));
         System.out.println("============");
-        System.out.println(prefix + " " + playerClass.name + " turn!");
     }
     static void playerTurn (String scannerInput)
     {
