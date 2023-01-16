@@ -6,9 +6,14 @@ public class Main {
     static PlayerClass enemyA = new PlayerClass(100, .00001, "Enemy (A.I)");
     static ColorsClass color = new ColorsClass("\u001B[35m", "\u001B[33m", "\u001B[0m");
     static byte Turn, Rounds;
+    static byte minEnemyDecisions, maxEnemyDecisions;
     static char prefix = '>';
     public static void main(String[] args) {
+
         Turn = 0;
+
+        minEnemyDecisions = 4;
+        maxEnemyDecisions = 5;
 
             while (enemyA.health > 0 && playerClass.health > 0) {
 
@@ -76,12 +81,9 @@ public class Main {
                     endTurn((byte)  1, playerClass);
                     System.out.println(prefix + playerClass.name+" has skipped their turn!");
                     break;
-                case "3":
-                    endTurn((byte) 1, playerClass);
-                    break;
                 default:
-                    endTurn((byte)  0, enemyA);
-                    System.out.println(prefix + " " + "Please enter an input.");
+                    endTurn((byte)  0, playerClass);
+                    System.out.println(playerClass.name + " Skipped their turn!");
                     break;
             }
         }
@@ -96,18 +98,17 @@ public class Main {
         }
         System.out.println(prefix + " " + playerClass.name + " use it's ability to heal itself. \n " + playerClass.name + " now has " + (int) playerClass.health + " health. \n");
     }
-
     static void enemyTurn()
     {
         if (enemyA.health > 0) {
 
             System.out.println("\n" + prefix + " " + enemyA.name + " turn!\n");
 
-            int RandomDecision = ThreadLocalRandom.current().nextInt( 0, 4);
+            int RandomDecision = ThreadLocalRandom.current().nextInt( minEnemyDecisions, maxEnemyDecisions);
 
             enemyRandomDescision(RandomDecision);
 
-            endTurn((byte) 0 , enemyA);
+            //endTurn((byte) 0 , enemyA);
 
             if (playerClass.health <= 0) {
                 System.out.println(playerClass.name + " has died!");
@@ -159,7 +160,7 @@ public class Main {
                     enemyRandomHealthRegenerate((byte) 5, (byte) 15.2);
                 }
                 else {
-                        System.out.println(enemyA.name + " wanted to use it's ability to heal itself but \n is already on " + enemyA.health + "/100\n");
+                        System.out.println(enemyA.name + " attempted to use it's ability to heal itself\n");
                     }
                 break;
             case 2:
@@ -171,8 +172,11 @@ public class Main {
                     enemyBoostedDamage(0, 3);
                 }
                 else {
-                    System.out.println(enemyA.name+" skipped their turn!");
+                    System.out.println(enemyA.name+" attempted to use it's ability to boost it's damage!");
                 }
+                break;
+            default:
+                endTurn((byte) 0, null);
                 break;
         }
     }
