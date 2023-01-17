@@ -6,27 +6,26 @@ public class Main {
     static PlayerClass player = new PlayerClass(100, .00001,"Player");
     static PlayerClass enemy = new PlayerClass(100, .00001, "Enemy (A.I)");
     static ColorsClass color = new ColorsClass("\u001B[35m", "\u001B[33m", "\u001B[0m");
-    static ArrayList<String> abilityMessage = new ArrayList<String>();
-    static byte Turn, Rounds, minEnemyDecisions, maxEnemyDecisions;
+    static byte Turn, Rounds, minEnemyDecisions, maxEnemyDecisions, level;
+    static short currentExp;
+    static short[] exp = new short[10];
     static char prefix = '>';
     public static void main(String[] args) {
-        //Player abilities messages
 
-        /*
-            1. Healing ability
-            2. Attacking ability
-            3. Skip ability
-         */
-        abilityMessage.add(prefix + " " + player.name + " is using healing ability"); // 0
-        abilityMessage.add(prefix + " " + player.name + " is using attacking ability"); // 1
-        abilityMessage.add(prefix + " " + player.name + " skipped turn"); // 2
+        level = 0;
 
         Turn = 0;
 
         minEnemyDecisions = 0;
         maxEnemyDecisions = 3;
 
-            while (enemy.health > 0 && player.health > 0) {
+        System.out.println("Remaining exp " + currentExp);
+
+        while (enemy.health > 0 && player.health > 0) {
+
+
+            LevelManagement(); levelUp();
+
 
                 RoundHeader();
 
@@ -62,6 +61,8 @@ public class Main {
         System.out.println("=== " + player.name + " stats ===");
         System.out.println(prefix + color.purple + " Health: " + color.colorReset + player.health);
         System.out.println(prefix + color.purple + " Base damage: " + color.colorReset + (byte) player.damage);
+        System.out.println(prefix + color.purple + " Level: " + color.colorReset + level);
+        System.out.println(prefix + color.purple + " Exp: " + color.colorReset + currentExp);
         System.out.println("============");
     }
     static void playerTurn (String scannerInput)
@@ -78,6 +79,7 @@ public class Main {
                             System.out.println(enemy.name + " has died!");
                             System.out.println("====== Round(s) " + Rounds + "======");
                         }
+                        currentExp += 50;
                         break;
                     }
                 case "2":
@@ -88,6 +90,7 @@ public class Main {
                     else {
                         System.out.println(player.name + " attempted to heal him self" + "\n");
                     }
+                    currentExp += 50;
                     break;
                 default:
                     System.out.println(player.name + " Skipped their turn!");
@@ -104,7 +107,6 @@ public class Main {
         if (player.health > 100) {
             player.health = 100;
         }
-        System.out.println(abilityMessage.get(1));
         System.out.println(prefix + " " + player.name + " use it's ability to heal itself. \n " + player.name + " now has " + (int) player.health + " health. \n");
     }
     static void enemyTurn()
@@ -134,7 +136,6 @@ public class Main {
     {
         player.bonusDamage = ThreadLocalRandom.current().nextDouble(minAttackDamageValue, maxAttackDamageValue);
         enemy.health = (int) (enemy.health - player.damage - player.bonusDamage);
-        System.out.println(abilityMessage.get(1));
         System.out.println(prefix + " " + player.name + " did " + player.damage + " base damage \n and " + (int) player.bonusDamage + " bonus damage!");
     }
     static void enemyRandomAttackDamageBonus(float minAttackDamageValue, float maxAttackDamageValue)
@@ -180,6 +181,56 @@ public class Main {
                 else {
                     System.out.println(enemy.name+" attempted to use it's ability to boost it's damage!");
                 }
+                break;
+        }
+    }
+    static void levelUp()
+    {
+        if (currentExp >= exp[level] && level < exp.length - 1)
+        {
+            currentExp -= exp[level];
+
+            level = (byte) (level + (byte)1);
+
+            System.out.println("Leveled up!");
+            System.out.println("Level is now " + level);
+            System.out.println("Remaining exp " + currentExp);
+        }
+    }
+
+    static void LevelManagement()
+    {
+        switch (level)
+        {
+            case 0:
+                exp[level] = 50;
+                break;
+            case 1:
+                exp[level] = 100;
+                break;
+            case 2:
+                exp[level] = 300;
+                break;
+            case 3:
+                exp[level] = 600;
+                break;
+            case 4:
+                exp[level] = 1000;
+                break;
+            case 5:
+                exp[level] = 1700;
+                break;
+            case 6:
+                exp[level] = 2200;
+                break;
+            case 7:
+                exp[level] = 3000;
+                break;
+            case 8:
+                exp[level] = 3300;
+                break;
+            case 9:
+                exp[level] = 3600;
                 break;
         }
     }
