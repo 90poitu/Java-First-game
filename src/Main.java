@@ -7,34 +7,21 @@ public class Main {
     static PlayerClass enemy = new PlayerClass(100, .00001, "Enemy (A.I)");
     static ColorsClass color = new ColorsClass("\u001B[35m", "\u001B[33m", "\u001B[0m");
     static byte Turn, Rounds, minEnemyDecisions, maxEnemyDecisions, level;
-    static short currentExp;
+    static short currentExp, minExpGiven, maxExpGiven;
     static short[] exp = new short[10];
     static char prefix = '>';
     public static void main(String[] args) {
-
         level = 0;
-
         Turn = 0;
-
         minEnemyDecisions = 0;
         maxEnemyDecisions = 3;
-
-        System.out.println("Remaining exp " + currentExp);
-
         while (enemy.health > 0 && player.health > 0) {
-
-
-            LevelManagement(); levelUp();
-
-
-                RoundHeader();
-
+            levelUp();
+            LevelManagement();
+            RoundHeader();
                 System.out.println(prefix + " " + player.name + " turn!");
-
                 String scannerInput = scanner.nextLine();
-
                 playerTurn(scannerInput);
-
                 if (Turn == 1) {
                     enemyTurn();
                     Rounds++;
@@ -49,8 +36,8 @@ public class Main {
         System.out.println(prefix + color.purple + " " + color.yellow + enemy.name.substring(6, (11 - 0)) + color.colorReset + color.purple + " Health recharge" + color.colorReset);
         System.out.println(prefix + color.purple + " " + color.yellow + enemy.name.substring(6, (11 - 0)) + color.colorReset + color.purple + " Boost damage" + color.colorReset + "\n");
         System.out.println("=== " + enemy.name + " stats ===\n");
-        System.out.println(prefix + color.purple+ " Health: " + color.colorReset + enemy.health);
-        System.out.println(prefix + color.purple+ " Base damage: " + color.colorReset + (byte) enemy.damage);
+        System.out.println(prefix + color.purple+ " Health: " + color.colorReset + enemy.health + "/" + 100);
+        System.out.println(prefix + color.purple+ " Base damage: " + color.colorReset + (byte) enemy.damage + "/" + 20);
         System.out.println("============");
 
         System.out.println("====== Round(s) " + Rounds + " ======");
@@ -59,19 +46,19 @@ public class Main {
         System.out.println(prefix +color.purple +" Health recharge\n" + color.colorReset);
 
         System.out.println("=== " + player.name + " stats ===");
-        System.out.println(prefix + color.purple + " Health: " + color.colorReset + player.health);
+        System.out.println(prefix + color.purple + " Health: " + color.colorReset + player.health + "/"+100);
         System.out.println(prefix + color.purple + " Base damage: " + color.colorReset + (byte) player.damage);
-        System.out.println(prefix + color.purple + " Level: " + color.colorReset + level);
-        System.out.println(prefix + color.purple + " Exp: " + color.colorReset + currentExp);
+        System.out.println(prefix + color.purple + " Level: " + color.colorReset + level + "/"+( exp.length -1 ));
+        System.out.println(prefix + color.purple + " Exp: " + color.colorReset + currentExp + "/" + exp[level]);
         System.out.println("============");
     }
     static void playerTurn (String scannerInput)
     {
+        double randomExp = ThreadLocalRandom.current().nextDouble((double)minExpGiven, (double)maxExpGiven);
+
         if (Turn == 0) {
             switch (scannerInput) {
                 case "1":
-                    if (enemy.health > 0) {
-
                         playerRandomAttackDamageBonus(0, 2);
 
                         if (enemy.health <= 0)
@@ -79,9 +66,8 @@ public class Main {
                             System.out.println(enemy.name + " has died!");
                             System.out.println("====== Round(s) " + Rounds + "======");
                         }
-                        currentExp += 50;
+                    currentExp += randomExp;
                         break;
-                    }
                 case "2":
                     if (player.health > 0 && player.health < 100)
                     {
@@ -90,7 +76,7 @@ public class Main {
                     else {
                         System.out.println(player.name + " attempted to heal him self" + "\n");
                     }
-                    currentExp += 50;
+                    currentExp += randomExp;
                     break;
                 default:
                     System.out.println(player.name + " Skipped their turn!");
@@ -175,7 +161,7 @@ public class Main {
                     }
                 break;
             case 2:
-                if (enemy.damage > 0 && enemy.damage < 100) {
+                if (enemy.damage > 0 && enemy.damage < 20) {
                     enemyBoostedDamage(0, 3);
                 }
                 else {
@@ -192,9 +178,7 @@ public class Main {
 
             level = (byte) (level + (byte)1);
 
-            System.out.println("Leveled up!");
-            System.out.println("Level is now " + level);
-            System.out.println("Remaining exp " + currentExp);
+            System.out.println(prefix + " Congratulation, " + player.name + " level is now " + level + ".\n" + prefix + " Remaining exp " + currentExp + ".");
         }
     }
 
