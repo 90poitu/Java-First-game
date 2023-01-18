@@ -13,16 +13,25 @@ public class Main {
     final static char PREFIX = '>';
     public static void main(String[] args) {
         level = 0;
+        exp[0] = 50;
         Turn = 0;
+
         while (enemy.health > 0 && player.health > 0) {
+
             levelUp();
             LevelManagement();
             RoundHeader();
+
                 System.out.println(PREFIX + " " + player.name + " turn!");
+
                 String scannerInput = scanner.nextLine();
+
                 playerTurn(scannerInput);
+
                 if (Turn == 1) {
+
                     enemyTurn();
+
                     Rounds++;
                 }
             }
@@ -77,6 +86,7 @@ public class Main {
                     System.out.println(player.name + " Skipped their turn!");
                     break;
             }
+            currentExp += 40;
             endTurn((byte)  1, player);
         }
     }
@@ -173,7 +183,8 @@ public class Main {
 
             level = (byte) (level + (byte)1);
 
-            System.out.println(PREFIX + " Congratulation, " + player.name + " level is now " + level + ".\n" + PREFIX + " Remaining exp " + currentExp + ".");
+            System.out.println(PREFIX + " Congratulation, " + player.name + " level is now " + level + ".");
+
         }
     }
 
@@ -181,9 +192,6 @@ public class Main {
     {
         switch (level)
         {
-            case 0:
-                exp[level] = 50;
-                break;
             case 1:
                 exp[level] = 100;
                 break;
@@ -219,7 +227,7 @@ public class Main {
         switch (level)
         {
             case 0:
-                currentExp += ThreadLocalRandom.current().nextInt();
+                currentExp += ThreadLocalRandom.current().nextInt(0, 10);
                 break;
             case 1:
                 currentExp += 10;
