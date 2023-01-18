@@ -2,7 +2,8 @@ import java.util.Scanner;
 import java.util.concurrent.ThreadLocalRandom;
 public class Main {
     static Scanner scanner = new Scanner(System.in);
-    static PlayerClass player = new PlayerClass(100, .00001,"Player", (byte) 0);
+    static Scanner scan = new Scanner(System.in);
+    static PlayerClass player = new PlayerClass(1, .00001,"Player", (byte) 0);
     static PlayerClass enemy = new PlayerClass(100, .00001, "Enemy (A.I)", (byte) 0);
     static ColorsClass color = new ColorsClass();
     static byte Turn, Rounds;
@@ -11,12 +12,23 @@ public class Main {
     static short currentExp, minExpGiven, maxExpGiven;
     static short[] exp = new short[10];
     final static char PREFIX = '>';
-    static boolean isPlayerSkip;
+    static boolean isPlayerSkip, isStarted;
     public static void main(String[] args) {
+
+        isStarted = false;
         exp[0] = 50;
         Turn = 0;
 
-        while (enemy.health > 0 && player.health > 0) {
+        while (!isStarted) {
+
+            RoundNotStarted();
+
+            String scanInput = scanner.nextLine();
+
+            RoundStart(scanInput);
+        }
+
+        while (enemy.health > 0 && player.health > 0 && isStarted) {
 
             levelUp();
             LevelManagement();
@@ -34,6 +46,28 @@ public class Main {
 
                     Rounds++;
                 }
+            }
+        }
+
+        static void RoundNotStarted() {
+            System.out.println("====== Before round start ======");
+            System.out.println("Press " + 1 + " to start");
+            System.out.println("Press " + 2 + " to go to the shop");
+            System.out.println("This game was created by: Clarence");
+        }
+        static void RoundStart(String scan) {
+            switch (scan) {
+                case "1":
+                    System.out.println("Starting the game soon!");
+                    isStarted = true;
+                    break;
+                case "2":
+                    System.out.println("====== Shop ======");
+                    System.out.println("Welcome to the shop");
+                    break;
+                default:
+                    isStarted = false;
+                    break;
             }
         }
     static void RoundHeader ()
