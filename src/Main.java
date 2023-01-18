@@ -2,17 +2,17 @@ import java.util.Scanner;
 import java.util.concurrent.ThreadLocalRandom;
 public class Main {
     static Scanner scanner = new Scanner(System.in);
-    static PlayerClass player = new PlayerClass(100, .00001,"Player");
-    static PlayerClass enemy = new PlayerClass(100, .00001, "Enemy (A.I)");
+    static PlayerClass player = new PlayerClass(100, .00001,"Player", (byte) 0);
+    static PlayerClass enemy = new PlayerClass(100, .00001, "Enemy (A.I)", (byte) 0);
     static ColorsClass color = new ColorsClass();
-    static byte Turn, Rounds, level;
+    static byte Turn, Rounds;
     final static byte minEnemyDecisions = 0;
-    final static byte maxEnemyDecisions = 5;
+    final static byte maxEnemyDecisions = 4;
     static short currentExp, minExpGiven, maxExpGiven;
     static short[] exp = new short[10];
     final static char PREFIX = '>';
+    static boolean isPlayerSkip;
     public static void main(String[] args) {
-        level = 0;
         exp[0] = 50;
         Turn = 0;
 
@@ -46,6 +46,7 @@ public class Main {
         System.out.println("=== " + enemy.name + " stats ===\n");
         System.out.println(PREFIX + color.purple+ " Health: " + color.colorReset + enemy.health + "/" + 100);
         System.out.println(PREFIX + color.purple+ " Base damage: " + color.colorReset + (byte) enemy.damage + "/" + 20);
+        System.out.println(PREFIX + color.purple+ " Level: " + color.colorReset + enemy.level);
         System.out.println("============");
 
         System.out.println("====== Round(s) " + Rounds + " ======");
@@ -56,8 +57,8 @@ public class Main {
         System.out.println("=== " + player.name + " stats ===");
         System.out.println(PREFIX + color.purple + " Health: " + color.colorReset + player.health + "/"+100);
         System.out.println(PREFIX + color.purple + " Base damage: " + color.colorReset + (byte) player.damage);
-        System.out.println(PREFIX + color.purple + " Level: " + color.colorReset + level + "/"+( exp.length -1 ));
-        System.out.println(PREFIX + color.purple + " Exp: " + color.colorReset + currentExp + "/" + exp[level]);
+        System.out.println(PREFIX + color.purple + " Level: " + color.colorReset + player.level + "/"+( exp.length -1 ));
+        System.out.println(PREFIX + color.purple + " Exp: " + color.colorReset + currentExp + "/" + exp[player.level]);
         System.out.println("============");
     }
     static void playerTurn (String scannerInput)
@@ -83,10 +84,19 @@ public class Main {
                     }
                     break;
                 default:
+                    isPlayerSkip = true;
                     System.out.println(player.name + " Skipped their turn!");
                     break;
             }
-            currentExp += 40;
+
+            if (!isPlayerSkip)
+            {
+            currentExp += ThreadLocalRandom.current().nextInt(0, 40);
+            }
+            else {
+                currentExp -= ThreadLocalRandom.current().nextInt(0, 20);
+            }
+            isPlayerSkip = false;
             endTurn((byte)  1, player);
         }
     }
@@ -102,11 +112,20 @@ public class Main {
     }
     static void enemyTurn()
     {
+        int RandomDecision;
+
         if (enemy.health > 0) {
 
             System.out.println("\n" + PREFIX + " " + enemy.name + " turn!\n");
 
-            int RandomDecision = ThreadLocalRandom.current().nextInt( minEnemyDecisions, maxEnemyDecisions);
+            if (enemy.health < 30)
+            {
+                RandomDecision = 1;
+            }
+            else
+            {
+                 RandomDecision = ThreadLocalRandom.current().nextInt( minEnemyDecisions, maxEnemyDecisions);
+            }
 
             enemyRandomDescision(RandomDecision);
 
@@ -173,64 +192,54 @@ public class Main {
                     System.out.println(enemy.name+" attempted to use it's ability to boost it's damage!");
                 }
                 break;
+            case 3:
+                System.out.println(enemy.name+" attempted to use it's ability to do nothing!");
+                break;
         }
     }
     static void levelUp()
     {
-        if (currentExp >= exp[level] && level < exp.length - 1)
+        if (currentExp >= exp[player.level] && player.level < exp.length - 1)
         {
-            currentExp -= exp[level];
+            currentExp -= exp[player.level];
 
-            level = (byte) (level + (byte)1);
+            player.level = (byte) (player.level + (byte)1);
 
-            System.out.println(PREFIX + " Congratulation, " + player.name + " level is now " + level + ".");
+            System.out.println(PREFIX + " Congratulation, " + player.name + " level is now " + player.level + ".");
 
         }
     }
 
     static void LevelManagement()
     {
-        switch (level)
+        switch (player.level)
         {
             case 1:
-                exp[level] = 100;
+                exp[player.level] = 100;
                 break;
             case 2:
-                exp[level] = 300;
+                exp[player.level] = 300;
                 break;
             case 3:
-                exp[level] = 600;
+                exp[player.level] = 600;
                 break;
             case 4:
-                exp[level] = 1000;
+                exp[player.level] = 1000;
                 break;
             case 5:
-                exp[level] = 1700;
+                exp[player.level] = 1700;
                 break;
             case 6:
-                exp[level] = 2200;
+                exp[player.level] = 2200;
                 break;
             case 7:
-                exp[level] = 3000;
+                exp[player.level] = 3000;
                 break;
             case 8:
-                exp[level] = 3300;
+                exp[player.level] = 3300;
                 break;
             case 9:
-                exp[level] = 3600;
-                break;
-        }
-    }
-
-    static void EarnedExpForDifferentLevel()
-    {
-        switch (level)
-        {
-            case 0:
-                currentExp += ThreadLocalRandom.current().nextInt(0, 10);
-                break;
-            case 1:
-                currentExp += 10;
+                exp[player.level] = 3600;
                 break;
         }
     }
